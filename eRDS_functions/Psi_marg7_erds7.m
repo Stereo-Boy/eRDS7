@@ -58,7 +58,7 @@ if strcmp(action,'value')
         % Any parameter defined below is not varying through the estimation
         % We assume a value for them (actually defined in parametersERDS6)
         psi.history=nan(expe.nn,10);
-        psi.labels = {'psi trials','disparity','correct','thres est.','slope est.', 'neg slope est.', 'threshold','trial #'};
+        psi.labels = {'psi trials','disparity','correct','thres est.','slope est.', 'neg slope est.', 'threshold','trial #','range min', 'range max'};
         
         % Parameter space
         [psi.tt, psi.ss, psi.ll, psi.xx] = ndgrid(psi.thresholds, psi.slopes, psi.neg_slopes, psi.disparities);
@@ -160,7 +160,7 @@ elseif strcmp(action,'record') % and update
 
         psi.history(psi.trial,1:10) = [psi.trial, 10.^psi.current_disp, psi.correct, ...
             curr_est_sum_thr, curr_est_sum_pos_slo, curr_est_sum_neg_slo, psi.thr_sum, ...
-            psi.trialID,range(1),range(2)];
+            psi.trialID,nan,nan];
             %   1       current psi trial
             %   2       current disparity shown in "
             %   3       psi.correct or not
@@ -284,9 +284,9 @@ elseif strcmp(action,'simulate')
         
     for trial = 1:expe.nn
        % find out what is the next disparity
-       psi = Psi_marg6_erds6('value',trial, psi, expe, []); 
+       psi = Psi_marg7_erds7('value',trial, psi, expe, []); 
        % update and record psi data
-       psi = Psi_marg6_erds6('record',trial, psi, expe, []);       
+       psi = Psi_marg7_erds7('record',trial, psi, expe, []);       
     end
     psi1 = psi; psi2 = psi;
     save(fullfile(expe.datapath, [expe.name,'_menu',num2str(expe.menu)]))

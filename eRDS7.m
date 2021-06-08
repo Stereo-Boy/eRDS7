@@ -416,11 +416,7 @@ try
             disp('==========================================')
             disp('         Results')
             dispi('Duration:',round(expe.duration,1));
-            if isfield(psi1, 'threshold')
-                stereoAcuity(fullfile(expe.datapath,[expe.file,'.mat']))
-            else
-                disp('No threshold detected in psi structure.')
-            end
+            stereoAcuity(fullfile(expe.datapath,[expe.file,'.mat']))
             diary OFF 
 catch err   %===== DEBUGING =====%
     sca
