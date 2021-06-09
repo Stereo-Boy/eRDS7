@@ -307,7 +307,7 @@ try
        psi2 = psi; psi2.sign = 'far';  % far disparities
        clear psi;
        stopSignal = 0;
-       if expe.menu==8 % CHECKS
+       if expe.menu==5 % CHECKS
            Screen('FillRect',scr.w, sc(scr.backgr,scr));
            step1 = ['Step 1 = Luminance checks. Check that next window (background) luminance is ',num2str(scr.backgr),' cd.-m2, that the two after (white and blueish) are ',...
                num2str(stim.maxLum),'. Press a key to start.'];
@@ -333,7 +333,7 @@ try
            Screen('DrawDots', scr.w, [scr.LcenterXDot; scr.LcenterYDot+50], stim.dotSize(2), sc(stim.dotColor1,scr),[],scr.antialliasingMode,scr.lenient);
            Screen('Flip',scr.w);
            waitForKey(scr.keyboardNum,expe.inputMode);
-           step3 = ['Step 3 = anti-aliasing checks. On next window, check that the dots are smoothly shifting from a location to another (no large step). Press a key to start.'];
+           step3 = 'Step 3 = anti-aliasing checks. On next window, check that the dots are smoothly shifting from a location to another (no large step). Press a key to start.';
            displaystereotext3(scr,sc(scr.fontColor,scr),stim.instrPosition,step3,1);
            Screen('Flip',scr.w);
            waitForKey(scr.keyboardNum,expe.inputMode);
@@ -356,7 +356,7 @@ try
            Screen('FrameRect', scr.w, sc(stim.fixR,scr),stim.frameR, stim.frameLineWidth/2); 
            Screen('Flip',scr.w);
            waitForKey(scr.keyboardNum,expe.inputMode);
-           step5 = ['Step 5 = Trial check. On next window, check that the long trial seems OK. You should hear sound. Press a key to start.'];
+           step5 = 'Step 5 = Trial check. On next window, check that the long trial seems OK. You should hear sound. Press a key to start.';
            Screen('FillRect',scr.w, sc(scr.backgr,scr));
            displaystereotext3(scr,sc(scr.fontColor,scr),stim.instrPosition,step5,1);
            Screen('Flip',scr.w);

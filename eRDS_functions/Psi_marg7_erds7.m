@@ -77,7 +77,6 @@ if strcmp(action,'value')
 
        psi.pCR = sum(sum(sum(psi.likelihoodCR.*psi.prior))); % success
        psi.pFail = 1-psi.pCR; % failure
-       psi.pCR + sum(sum(sum(psi.likelihoodFail.*psi.prior))) %should be 1
        
        % STEP 2
        % The posterior, which is the probability of parameters given a response at a potential disparity x
