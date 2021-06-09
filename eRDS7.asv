@@ -103,10 +103,6 @@ try
             return
     end
    
-    if expe.menu==2 || expe.menu==3
-        expe.nameDST=input('Enter name given during last DST: ','s');    %dst name
-    end
-    
     %==========================================================================
     %                           DEFAULT PARAMETERS
     %==========================================================================
@@ -127,8 +123,10 @@ try
             expe.nbTrials = 0;
             expe.practiceTrials = 5;
             expe.name = 'practice';
+            expe.nameDST=input('Enter name given during last DST: ','s');    %dst name
         case 3
             expe.name=nameInput(expe);  %erds datafile name
+            expe.nameDST=input('Enter name given during last DST: ','s');    %dst name
         case 4
             stim.itemDuration = 0;
             stim.flashDuration = 0.000001;
@@ -350,7 +348,7 @@ try
            end
            Screen('Flip',scr.w);
            waitForKey(scr.keyboardNum,expe.inputMode);
-           step4 = 'Step 4 = stereoDeviation check. On next window, check that frames do not cross over. Press a key to start.';
+           step4 = ['Step 4 = stereoDeviation check. On next window, check that frames do not cross over. Press a key to start.'];
            displaystereotext3(scr,sc(scr.fontColor,scr),stim.instrPosition,step4,1);
            Screen('Flip',scr.w);
            waitForKey(scr.keyboardNum,expe.inputMode);
@@ -418,7 +416,8 @@ try
             disp('==========================================')
             disp('         Results')
             dispi('Duration:',round(expe.duration,1));
-            if expe.menu==3;            stereoAcuity(fullfile(expe.datapath,[expe.file,'.mat'])); end
+            if expe.menu
+            stereoAcuity(fullfile(expe.datapath,[expe.file,'.mat']))
             diary OFF 
 catch err   %===== DEBUGING =====%
     sca
