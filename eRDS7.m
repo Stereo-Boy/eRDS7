@@ -92,7 +92,7 @@ try
     disp('====================================')
     expe.menu=input('Your choice? ');
     
-    if isnumeric(expe.menu>6)==0 || expe.menu<1 || expe.menu>6
+    if isnumeric(expe.menu)==0 || expe.menu<1 || expe.menu>6
         disp('Input not recognized. It needs to be a number from 1-6')
         expe.menu = 6;
     end
