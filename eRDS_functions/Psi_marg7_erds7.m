@@ -132,9 +132,7 @@ elseif strcmp(action,'record') % and update
         else
             psi.prior = psi.postFail(:,:,:,psi.idx); % probabilities of each parameter
         end
-
-        sum(psi.prior(:)) % should be 1
-        
+       
         % STEP 8 find best estimates - here we take the posterior weighted sum as best estimate
            % [~,idx2] = max(psi.prior(:));
            % curr_est_max_thr = 10.^psi.tt(idx2);
