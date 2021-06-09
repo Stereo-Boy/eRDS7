@@ -55,6 +55,7 @@ function eRDS7
 
 try
   clc
+  close all
   disp(' ------------    eRDS ------------------')  
   %add path to functions and define some folder paths, check that they exist, start a log file
     [expe.eRDSpath,~]=fileparts(mfilename('fullpath')); %path to erds folder
@@ -102,10 +103,12 @@ try
             diary OFF
             return
     end
-   
+    
     if expe.menu==2 || expe.menu==3
         expe.nameDST=input('Enter name given during last DST: ','s');    %dst name
     end
+    
+    expe.name=nameInput(expe);  %erds datafile name
     
     %==========================================================================
     %                           DEFAULT PARAMETERS
@@ -127,8 +130,6 @@ try
             expe.nbTrials = 0;
             expe.practiceTrials = 5;
             expe.name = 'practice';
-        case 3
-            expe.name=nameInput(expe);  %erds datafile name
         case 4
             stim.itemDuration = 0;
             stim.flashDuration = 0.000001;
