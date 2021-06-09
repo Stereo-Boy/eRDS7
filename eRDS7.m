@@ -90,14 +90,14 @@ try
     disp('5: Checking mode')      % some checks 
     disp('6: Exit')
     disp('====================================')
-    expe.menu=str2double(input('Your choice? ','s'));
+    expe.menu=input('Your choice? ');
     
     if isnumeric(expe.menu>6)==0 || expe.menu<1 || expe.menu>6
         disp('Input not recognized. It needs to be a number from 1-6')
         expe.menu = 6;
     end
     
-    if expe.menu == 9 % QUIT
+    if expe.menu == 6 % QUIT
             disp('Exiting')
             diary OFF
             return
