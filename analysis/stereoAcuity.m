@@ -22,7 +22,6 @@ addpath(fullfile(eRDSpath,'eRDS_functions'));
 expe.eRDSpath = eRDSpath; dispi('Data file: ',expe.filename);
 dispi('Duration: ',round(expe.duration,1),' min');
 psi=psi1;        psi.history = [psi1.history; psi2.history]; psi.history = sortrows(psi.history,8);
-figure('Color', 'w','Units','normalized','Position',[0 0 0.5 1]);
 psi = recomputeFromData4(psi, 1);
 psi.final_threshold=round(min(psi.maxAllowerThreshold,psi.threshold),1);
 dispi('Final threshold: ',psi.final_threshold,' arcsec');
