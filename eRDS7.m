@@ -62,7 +62,7 @@ try
     expe.funpath = fullfile(expe.eRDSpath,'eRDS_functions'); %path to common functions
     if exist(expe.funpath,'dir')==7; addpath(expe.funpath); else; disp('Function folder does not exist:'); disp(expe.funpath); end %add that path to use these functions
     expe.rootpath = fileparts(expe.eRDSpath); % path where both eRDS and DST folders should be present
-    expe.DSTpath = fullfile(expe.rootpath,'DST8','dataFiles'); % dst datafile path
+    expe.DSTpath = fullfile(expe.rootpath,'DST9','dataFiles'); % dst datafile path
     expe.logpath = fullfile(expe.eRDSpath,'log'); % log file path
     expe.datapath = fullfile(expe.eRDSpath,'dataFiles'); % path to the datafile folder
     expe.screenpath = fullfile(expe.eRDSpath,'screen'); % path to the screen folder 
