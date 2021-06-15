@@ -108,7 +108,9 @@ try
         expe.nameDST=input('Enter name given during last DST: ','s');    %dst name
     end
     
-    expe.name=nameInput(expe);  %erds datafile name
+    if expe.menu==3
+        expe.name=nameInput(expe);  %erds datafile name
+    end
     
     %==========================================================================
     %                           DEFAULT PARAMETERS
