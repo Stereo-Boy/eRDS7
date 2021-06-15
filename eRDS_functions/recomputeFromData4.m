@@ -42,7 +42,7 @@ ttt=tt(:);sss=ss(:);lll=ll(:);
                       [~,idx3] = max(psi.prior(:)); 
                       
                       % max estimate
-                       curr_est_max_thr = 10.^ttt(idx3);
+                       curr_est_max_thr = 10.^ttt(idx3); tmp = ttt(idx3);
                        curr_est_max_pos_slo = sss(idx3);
                        curr_est_max_neg_slo = lll(idx3);
                        history(i,4:6) = [curr_est_max_thr,curr_est_max_pos_slo,curr_est_max_neg_slo];
@@ -53,7 +53,7 @@ ttt=tt(:);sss=ss(:);lll=ll(:);
                         marg_nslo=squeeze(sum(sum(psi.prior(:,:,:,1),2),1)); 
                         
                         %calculate and save exact p(MAP)
-                        history(i,11:13) = 100.*[marg_thr(disparities==log10(curr_est_max_thr)),marg_pslo(psi.new_slopes==curr_est_max_pos_slo),marg_nslo(psi.new_neg_slopes==curr_est_max_neg_slo)];
+                        history(i,11:13) = 100.*[marg_thr(disparities==tmp),marg_pslo(psi.new_slopes==curr_est_max_pos_slo),marg_nslo(psi.new_neg_slopes==curr_est_max_neg_slo)];
                         %calculate and save p(MAP+-5%)
                         selected_thr=marg_thr((disparities>(log10(curr_est_max_thr.*(1-tolerance))))&(disparities<(log10(curr_est_max_thr.*(1+tolerance)))));
                         history(i,14) = 100.*sum(selected_thr(:)); % probability that this threshold is correct (cumulated prob sum of t+-tolerance)
