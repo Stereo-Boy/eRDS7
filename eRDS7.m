@@ -88,13 +88,14 @@ try
     disp('2: Practice 2 x 5 trials') % large disparities
     disp('3: Test 2 x 12 practice + 73 trials')
     disp('4: Robot mode')         %defines inputMode - 1: User  ; 2: Robot / The robot mode allows to test the experiment with no user awaitings or long graphical outputs, just to test for obvious bugs
-    disp('5: Checking mode')      % some checks 
+    disp('5: Check mode')      % some checks 
     disp('6: Exit')
+    disp('7: Practice with 10-sec presentation')
     disp('====================================')
     expe.menu=input('Your choice? ');
     
-    if isnumeric(expe.menu)==0 || expe.menu<1 || expe.menu>6
-        disp('Input not recognized. It needs to be a number from 1-6')
+    if isnumeric(expe.menu)==0 || expe.menu<1 || expe.menu>7
+        disp('Input not recognized. It needs to be a number from 1-7')
         expe.menu = 6;
     end
     
@@ -104,7 +105,7 @@ try
             return
     end
     
-    if expe.menu==2 || expe.menu==3
+    if expe.menu==2 || expe.menu==3 || expe.menu==7
         expe.nameDST=input('Enter name given during last DST: ','s');    %dst name
     end
     
@@ -149,6 +150,12 @@ try
             expe.practiceTrials = 10; 
             expe.name = 'default';
             expe.nameDST = 'default';
+        case 7  
+            expe.feedback = 1;
+            expe.nbTrials = 0;
+            expe.practiceTrials = 5;
+            expe.name = 'practiceL';
+            stim.itemDuration = 10000; %ms
     end 
     expe.nn = expe.nbTrials+expe.practiceTrials; % number of trials in total (for either the near or the far disparities)
         % the actual total number of trials is two times expe.nn because we adds near and far trials.

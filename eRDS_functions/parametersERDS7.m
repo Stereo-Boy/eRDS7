@@ -45,6 +45,8 @@ function [expe,scr,stim,sounds, psi]=parametersERDS7(expe)
         %               6: down
         %               8: backspace
         %              52: enter (numpad)
+        %              12: down (numpad 2)
+        %              18: up (numpad 8)
     %======================================================================
     %              WINDOW-SCREEN PARAMETERS 
     %====================================================================== 
@@ -177,8 +179,8 @@ function [expe,scr,stim,sounds, psi]=parametersERDS7(expe)
             expe.allowed_key = [8, 1, 2]; %the escape key is not esc but backspace 
             expe.allowed_key_locked = [1, 2]; % after escapeTimeLimit, escape key is locked to avoid quitting by mistake
         else
-            expe.allowed_key = [8, 5, 6]; %the escape key is not esc but backspace 
-            expe.allowed_key_locked = [5, 6]; % after escapeTimeLimit, escape key is locked to avoid quitting by mistake
+            expe.allowed_key = [8, 12, 18]; %the escape key is not esc but backspace 
+            expe.allowed_key_locked = [12, 18]; % after escapeTimeLimit, escape key is locked to avoid quitting by mistake
         end
         expe.current_allowed = expe.allowed_key; 
         
@@ -276,7 +278,7 @@ function [expe,scr,stim,sounds, psi]=parametersERDS7(expe)
             50       
             20   
             ]));
-        psi.sim_threshold = 1000; %simulated threshold whenever we do robotMode
+        psi.sim_threshold = 100; %simulated threshold whenever we do robotMode
         psi.end = 0;  % end signal for algorithm
         psi.trial = 1;
         psi.donothing_counter = 0;

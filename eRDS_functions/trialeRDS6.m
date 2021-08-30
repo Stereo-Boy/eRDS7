@@ -522,13 +522,30 @@ function [expe, psi, stopSignal]=trialeRDS6(trial,stim,scr,expe,sounds,psi)
            [~, offsetStim]=flip2(expe.inputMode, scr.w,[],1);
            expe.stimTime= offsetStim-onsetStim;
            
+            
          % ---------------------  RESPONSE --------------------------    
           if responseKey == 0 
             %--------------------------------------------------------------------------
             %   GET RESPONSE if no response at that stage
             %--------------------------------------------------------------------------
+            
+           % decide what is a correct response
+            if stim.config == 1 % left-right
+                % task: which side is closer to you (1: left, 2: right)?
+                 expected_key = expected_side + 1;  % expected_side = 0 if centre closer, 1 if outer closer
+            elseif stim.config == 3 % center - outer 
+                % task: are the blue dot surface closer to you than the other one or further (5: further, 6: closer)?
+                if blueDots==0 %center is blue
+                    %expected_key = 6 - expected_side; % expected_side = 0 if centre closer, 1 if outer closer
+                    expected_key = 12 + expected_side.*6; % expected_side = 0 if centre closer, 1 if outer closer
+                else            % outer is blue
+                    %expected_key = 5 + expected_side; 
+                    expected_key = 18 - expected_side.*6;
+                end
+            end
+            
                % NOTE THAT ROBOTMODEERDS IS USELESS GIVEN PSI USES ITS OWN SIMULATION IMPLEMENTATION (see Psi_marg7_erds7.m)    
-               [responseKey, RT]=getResponseKb(scr.keyboardNum,0,expe.inputMode,expe.allowed_key,'robotModeERDS',[L_R_disp(1) L_R_disp(2) 100 800],1,0,0,0); %robotmode takes the 2 pedestal+disparity, the simulated threshold and the Panum area limit (all in arcsec)
+               [responseKey, RT]=getResponseKb(scr.keyboardNum,0,expe.inputMode,expe.allowed_key,'robotModeERDS',{expected_key psi},1,0,0,0); %robotmode takes the 2 pedestal+disparity, the simulated threshold and the Panum area limit (all in arcsec)
           end
 
         % ------------- ALLOWED RESPONSES as a function of TIME (allows escape in the first 10 min)-----%
@@ -542,7 +559,8 @@ function [expe, psi, stopSignal]=trialeRDS6(trial,stim,scr,expe,sounds,psi)
         %               6: down
         %               8: backspace
         %              52: enter (numpad)
-        
+        %              12: down (numpad 2)
+        %              18: up (numpad 8)
            % --- ESCAPE PRESS : escape the whole program ----%
            if responseKey==8 
                disp('Voluntary Interruption: exiting program.')
@@ -561,27 +579,22 @@ function [expe, psi, stopSignal]=trialeRDS6(trial,stim,scr,expe,sounds,psi)
                 keyboard
            end
 
-            % --- FEEDBACK  ---%
-            % decide what is correct or not
-            if stim.config == 1 % left-right
-                % task: which side is closer to you (1: left, 2: right)?
-                 expected_key = expected_side + 1;  % expected_side = 0 if centre closer, 1 if outer closer
-            elseif stim.config == 3 % center - outer 
-                % task: are the blue dot surface closer to you than the other one or further (5: further, 6: closer)?
-                if blueDots==0 %center is blue
-                    expected_key = 6 - expected_side; % expected_side = 0 if centre closer, 1 if outer closer
-                else            % outer is blue
-                    expected_key = 5 + expected_side; 
-                end
+            % --- FEEDBACK  ---%            
+            %correct or not?
+            if expected_key==responseKey %CORRECT
+                psi.correct = 1;
+            else
+                %INCORRECT
+                psi.correct = 0;
             end
+                
             % decide whether feedback needed or not, and what kind
              if expe.feedback>0
-                if expected_key==responseKey %CORRECT
+                if psi.correct == 1 %CORRECT
                    PsychPortAudio('Start', sounds.handle1, 1, 0, 1);
                     psi.correct = 1;
                 else
                     %INCORRECT
-                    psi.correct = 0;
                     if expe.feedback == 1 || (expe.feedback == 2 && psi.practice_trial==1) %meaningful auditory feedback
                     %if expe.feedback == 1 || expe.feedback == 2 %remove that line and take line above
                         PsychPortAudio('Start', sounds.handle2, 1, 0, 0); 
@@ -650,8 +663,8 @@ function [expe, psi, stopSignal]=trialeRDS6(trial,stim,scr,expe,sounds,psi)
                                    %    1:  trial # (different from psi.trial)
                                    %    2:  disparity value in arcsec of left/center side
                                    %    3:  disparity value in arcsec of right/outer side
-                                   %    4:  which side is closer (expected answer) - 1: left/center - 2:right/outer
-                                   %    5:  responseKey - left/center side is closer(1) or right/outer (2)
+                                   %    4:  which side is closer (expected answer) - 12 for closer, 18 for further
+                                   %    5:  responseKey - blue is closer (12) or is further (18)
                                    %    6:  stimulus duration in ms
                                    %    7:  RT = response duration after stimulus in ms     
                                    %    8:  Correct answer or not

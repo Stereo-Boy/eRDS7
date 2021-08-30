@@ -5,7 +5,7 @@ function response=robotModeERDS(robotprofil)
 %       2   disparity on the right in arcsec
 %       3   threshold in arcsec
 %       4   eventual return to chance after that amount of disparity in arcsec
-
+psi = robotprofil{2};
   %random
 %    response = randsample([6,5], 1,1,[0.5 0.5]);
 %======================================================================
@@ -22,7 +22,14 @@ function response=robotModeERDS(robotprofil)
 %         end
     %    bias = norminv(rand(1),400,20); %bias to see up in the back
     %    bias = 100;
- response=1;   
+    
+ pCorrect = defineLikelihood_bell(psi.g, psi.sim_neg_slope, psi.sim_pos_slope, psi.delta, psi.p,psi.current_disp, log10(psi.sim_threshold), psi.sim_lapse); % non-monotonic psychometric function
+correct=rand(1)<=pCorrect; 
+if correct
+    response = robotprofil{1};
+else
+    if robotprofil{1}==12; response = 18; else; response = 12; end
+end
 %  
 % if numel(robotprofil) == 4
 %         bias=0;              
@@ -63,3 +70,4 @@ function response=robotModeERDS(robotprofil)
 %             response=3-response; %error
 %         end
 %      
+end

@@ -49,7 +49,6 @@ if strcmp(action,'value')
             psi.sim=1;
             % PARAM for simulated psychometric function
             psi.sim_pos_slope = 0.2+rand(1).*(2-0.2); % random simulated slope
-            %pos_slope=1;
             psi.sim_neg_slope = rand(1).*0.112; % random simulated negative slope
             psi.sim_lapse = 0.005+rand(1).*0.03; % random finger rate error
         end
@@ -118,12 +117,6 @@ if strcmp(action,'value')
        % ----------------------------------
        psi.trialID = trialID;
 elseif strcmp(action,'record') % and update
-    
-      % STEP 6 response (for simulation only)
-       if psi.sim==1
-            pCorrect = defineLikelihood_bell(psi.g, psi.sim_neg_slope, psi.sim_pos_slope, psi.delta, psi.p,psi.current_disp, log10(psi.sim_threshold), psi.sim_lapse); % non-monotonic psychometric function
-            psi.correct=rand(1)<=pCorrect; 
-       end
        
        % ------------  UPDATE PSI depending ON CORRECT RESPONSE OR NOT ---------------%
        % STEP 7 update psi.prior depending of whether previous trial was psi.correct (1) or not (0) - similar to updating with the posterior
