@@ -125,13 +125,13 @@ try
             dispi('Quick mode uses some default values')
             expe.quickMode = 1; 
             expe.feedback = 1;
-            expe.practiceTrials = 10; 
+            expe.practiceTrials = 12; 
             expe.name = 'default';
             expe.nameDST = 'default';
         case 2
             expe.feedback = 1;
             expe.nbTrials = 0;
-            expe.practiceTrials = 5;
+            expe.practiceTrials = 10;
             expe.name = 'practice';
         case 4
             stim.itemDuration = 0;
@@ -147,13 +147,13 @@ try
             dispi('Check mode uses some default values')
             expe.quickMode = 1; 
             expe.feedback = 1;
-            expe.practiceTrials = 10; 
+            expe.practiceTrials = 12; 
             expe.name = 'default';
             expe.nameDST = 'default';
         case 7  
             expe.feedback = 1;
             expe.nbTrials = 0;
-            expe.practiceTrials = 5;
+            expe.practiceTrials = 10;
             expe.name = 'practiceL';
             stim.itemDuration = 10000; %ms
     end 
