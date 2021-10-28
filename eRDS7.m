@@ -131,7 +131,7 @@ try
         case 2
             expe.feedback = 1;
             expe.nbTrials = 0;
-            expe.practiceTrials = 10;
+            expe.practiceTrials = 5;
             expe.name = 'practice';
         case 4
             stim.itemDuration = 0;
