@@ -1,4 +1,4 @@
-function stereoAcuity(file)
+function psi = stereoAcuity(file)
 % This function analyze the results of eRDS7 psi-marg-grid algorithm to visualize the
 % data and the threshold
 %

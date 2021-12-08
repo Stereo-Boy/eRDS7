@@ -66,16 +66,16 @@ ttt=tt(:);sss=ss(:);lll=ll(:);
                             psi.stereoblind_prob = 100*sum(marg_thr((10.^psi.new_thresholds)>=psi.maxAllowerThreshold));   
                             
                             %calculate CI for threshold from marginalized posterior distribution
-                            thr_CI =  10.^findIC(disparities, log10(curr_est_max_thr), marg_thr, 'Threshold');
-                            pslo_CI =  findIC(psi.new_slopes, curr_est_max_pos_slo, marg_pslo, 'Positive slope');
-                            nslo_CI =  findIC(psi.new_neg_slopes, curr_est_max_neg_slo, marg_nslo, 'Negative slope');
+                            thr_CI =  10.^findIC(disparities, log10(curr_est_max_thr), marg_thr);
+                            pslo_CI =  findIC(psi.new_slopes, curr_est_max_pos_slo, marg_pslo);
+                            nslo_CI =  findIC(psi.new_neg_slopes, curr_est_max_neg_slo, marg_nslo);
 
                                 subplot(2,3,1)
                                 maxD = max(disparities); minD = min(disparities);
                                 plot(10.^disparities,marg_thr,'r'); hold on
                                 text(0.2,max(marg_thr)/2,sprintf('MAP: %2.f"',curr_est_max_thr))
                                 text(0.2,max(marg_thr)/3,['p(MAP+-',num2str(round(tolerance.*100)),'%) = ',sprintf('%2.f%%',history(end,14))])
-                                text(0.2,max(marg_thr)/4,['CI_9_5% = [',sprintf('%2.f"',thr_CI(1)),'-',sprintf('%2.f"',thr_CI(2)),']'])
+                                text(0.2,max(marg_thr)/4,['CI_9_0% = [',sprintf('%2.f"',thr_CI(1)),'-',sprintf('%2.f"',thr_CI(2)),']'])
                                 axis([10^minD 10^maxD 0 1.2*max(marg_thr)]);
                                 plot([curr_est_max_thr curr_est_max_thr],[0 1],'r--')
                                 xlabel('Thresholds (arcsec)')
@@ -91,7 +91,7 @@ ttt=tt(:);sss=ss(:);lll=ll(:);
                                 plot(psi.new_slopes,marg_pslo,'r'); hold on
                                 text(0.3,max(marg_pslo)/2,sprintf('MAP: %.2f',curr_est_max_pos_slo))
                                 text(0.3,max(marg_pslo)/3,['p(MAP+-',num2str(round(tolerance.*100)),'%) = ',sprintf('%2.f%%',history(end,15))])
-                                text(0.3,max(marg_pslo)/4,['CI_9_5% = [',sprintf('%.2f',pslo_CI(1)),'-',sprintf('%.2f',pslo_CI(2)),']'])
+                                text(0.3,max(marg_pslo)/4,['CI_9_0% = [',sprintf('%.2f',pslo_CI(1)),'-',sprintf('%.2f',pslo_CI(2)),']'])
                                 axis([minPS maxPS 0 1.2*max(marg_pslo)]);
                                 plot([curr_est_max_pos_slo curr_est_max_pos_slo],[0 1],'r--')
                                 xlabel('Positive slope')
@@ -104,7 +104,7 @@ ttt=tt(:);sss=ss(:);lll=ll(:);
                                 plot(psi.new_neg_slopes,marg_nslo,'r'); hold on
                                 text(0.02,max(marg_nslo)/2,sprintf('MAP: %.2f',curr_est_max_neg_slo))
                                 text(0.02,max(marg_nslo)/3,['p(MAP+-',num2str(round(tolerance.*100)),'%) = ',sprintf('%2.f%%',history(end,16))])
-                                text(0.02,max(marg_nslo)/4,['CI_9_5% = [',sprintf('%.2f',nslo_CI(1)),'-',sprintf('%.2f',nslo_CI(2)),']'])
+                                text(0.02,max(marg_nslo)/4,['CI_9_0% = [',sprintf('%.2f',nslo_CI(1)),'-',sprintf('%.2f',nslo_CI(2)),']'])
                                 axis([minNS maxNS 0 1.2*max(marg_nslo)]);
                                 plot([curr_est_max_neg_slo curr_est_max_neg_slo],[0 1],'r--')
                                 xlabel('Negative slope')
@@ -141,12 +141,22 @@ ttt=tt(:);sss=ss(:);lll=ll(:);
                                     sample_pslo = randsample(ss(:),nn,'true',psi.prior(:));
                                     sample_nslo = randsample(ll(:),nn,'true',psi.prior(:));
                                     plot(xxx, defineLikelihood_bell(g, sample_nslo, sample_pslo, delta, p, log10(xxx), sample_thr, lapse),'r-'); hold on;
-                                plot(xxx, defineLikelihood_bell(g, curr_est_max_neg_slo, curr_est_max_pos_slo, delta, p, log10(xxx), log10(curr_est_max_thr), lapse),'k-');
+                                    best_est_curve = defineLikelihood_bell(g, curr_est_max_neg_slo, curr_est_max_pos_slo, delta, p, log10(xxx), log10(curr_est_max_thr), lapse);
+                                plot(xxx, best_est_curve,'b-');
                                 plot([curr_est_max_thr curr_est_max_thr],[0 1],'r--')
+                                %find second local minima for the best estimate curve
+                                idx_lm = find(islocalmin(abs(best_est_curve-0.75)));
+                                plot([xxx(idx_lm(2)) xxx(idx_lm(2))],[0 1],'b--')
+                                upper_disparity_limit = xxx(idx_lm(2));
+                                % plot confidence interval curves
+                                plot(xxx, defineLikelihood_bell(g, nslo_CI(1), pslo_CI(1), delta, p, log10(xxx), log10(thr_CI(1)), lapse),'k-'); %lower limit
+                                plot(xxx, defineLikelihood_bell(g, nslo_CI(2), pslo_CI(2), delta, p, log10(xxx), log10(thr_CI(2)), lapse),'k-'); %upper limit
                                 xlabel('Disparity (arcsec)')
                                 ylabel('% CR')
                                 text(0.2, 0.35, sprintf('MAP: %d"',round(curr_est_max_thr)));
                                 text(0.2, 0.25,  sprintf('p(stereoblind) = %2.f%%',100*sum(marg_thr((10.^disparities)>=1300))))
+                                text(0.2, 0.15, sprintf('Sensibility window: [%d" - %d"]',round(curr_est_max_thr),round(upper_disparity_limit)));
+                                fprintf('Sensibility window: [%d" - %d"]\n',round(curr_est_max_thr),round(upper_disparity_limit));
                                 dispa = history(1:i,2); responses = history(1:i,3);
                                 output = makeLevelEqualBoundsMean([dispa,responses],ceil(i/15));
                                 scatter(output(:,1),output(:,2),output(:,3).*7,'ok')
@@ -169,19 +179,30 @@ ttt=tt(:);sss=ss(:);lll=ll(:);
                        
                        end
                    end
-     psi.threshold = curr_est_max_thr;
+     psi.threshold = curr_est_max_thr; 
+     psi.curr_est_max_pos_slo = curr_est_max_pos_slo;
+     psi.curr_est_max_neg_slo = curr_est_max_neg_slo;
+     psi.upper_disparity_limit = upper_disparity_limit;
+     psi.thr_CI = thr_CI; psi.nslo_CI = nslo_CI; psi.pslo_CI = pslo_CI;
 end
 
-function thr_CI =  findIC(parameters, best_estimate, marg_posterior, header)
-    pp=0; j=0; k=0; idx = find(parameters==best_estimate); maxj=0; maxk=0;
-    while pp<95
-        if (idx-j-1)>0; j=j+1; else; maxj=1; end
-        if (idx+k+1)<=numel(parameters); k=k+1; else; maxk=1; end
-        select_p=marg_posterior((idx-j):(idx+k)); 
-        pp = 100.*sum(select_p);
-        if (maxj==1 && maxk==1);  dispi(header, ': something weird happened - please check'); break; end
+function thr_CI =  findIC(parameters, best_estimate, marg_posterior)
+%find lower limit
+    pp1=0; j=0;  
+    idx = find(parameters==best_estimate); %best estimate index among grid search
+    pp = 100.*marg_posterior(idx);
+    while pp1<(90-pp)/2 && (idx-j)>1
+        select_p=marg_posterior((idx-j):idx); 
+        pp1 = 100.*sum(select_p)-pp;
+        if pp1<(90-pp)/2; j=j+1; end
     end
-    if (maxj==1 || maxk==1);  dispi(header, ': possibly an asymetric CI - consider discarding it'); end
+%find upper limit
+    pp2=0; k=0;
+    while pp2<(90-pp)/2 && (idx+k)<numel(parameters)
+        select_p=marg_posterior(idx:(idx+k)) ;
+        pp2 = 100.*sum(select_p)-pp;
+        if pp2<(90-pp)/2; k=k+1; end
+    end
     thr_CI = [parameters(idx-j),parameters(idx+k)];
 end
 
