@@ -146,11 +146,12 @@ ttt=tt(:);sss=ss(:);lll=ll(:);
                                 plot([curr_est_max_thr curr_est_max_thr],[0 1],'r--')
                                 %find second local minima for the best estimate curve
                                 idx_lm = find(islocalmin(abs(best_est_curve-0.75)));
+                                if numel(idx_lm)==1; idx_lm(2) = numel(xxx); end
                                 plot([xxx(idx_lm(2)) xxx(idx_lm(2))],[0 1],'b--')
                                 upper_disparity_limit = xxx(idx_lm(2));
                                 % plot confidence interval curves
-                                plot(xxx, defineLikelihood_bell(g, nslo_CI(1), pslo_CI(1), delta, p, log10(xxx), log10(thr_CI(1)), lapse),'k-'); %lower limit
-                                plot(xxx, defineLikelihood_bell(g, nslo_CI(2), pslo_CI(2), delta, p, log10(xxx), log10(thr_CI(2)), lapse),'k-'); %upper limit
+                                %plot(xxx, defineLikelihood_bell(g, nslo_CI(1), pslo_CI(2), delta, p, log10(xxx), log10(thr_CI(1)), lapse),'k-'); %lower limit
+                                %plot(xxx, defineLikelihood_bell(g, nslo_CI(2), pslo_CI(2), delta, p, log10(xxx), log10(thr_CI(2)), lapse),'k-'); %upper limit
                                 xlabel('Disparity (arcsec)')
                                 ylabel('% CR')
                                 text(0.2, 0.35, sprintf('MAP: %d"',round(curr_est_max_thr)));
