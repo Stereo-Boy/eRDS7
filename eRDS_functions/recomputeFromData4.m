@@ -147,6 +147,7 @@ ttt=tt(:);sss=ss(:);lll=ll(:);
                                 %find second local minima for the best estimate curve
                                 idx_lm = find(islocalmin(abs(best_est_curve-0.75)));
                                 if numel(idx_lm)==1; idx_lm(2) = numel(xxx); end
+                                if numel(idx_lm)==0; idx_lm(1) = numel(xxx); idx_lm(2) = numel(xxx); end
                                 plot([xxx(idx_lm(2)) xxx(idx_lm(2))],[0 1],'b--')
                                 upper_disparity_limit = xxx(idx_lm(2));
                                 % plot confidence interval curves
